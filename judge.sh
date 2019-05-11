@@ -22,7 +22,11 @@ if [ $# -eq 1 ]; then
 				files=$( ls ./in/*.in )
 				for LINE in $files
 				do
-					./fcreated < "$LINE" > "./output/$N.out"
+					timeout 1 ./fcreated < "$LINE" > "./output/$N.out"  #timeout for tle check
+					if [ $? != 0 ]; then
+						echo "Time limit Exceeded " 
+						exit
+					fi	
 					diff ./output/$N.out ./correctoutput/$N.out > log.txt
 					if [ $? -eq 1 ]; then
 						echo " Wrong Answer In $LINE "
